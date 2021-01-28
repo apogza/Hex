@@ -12,6 +12,22 @@ hex_board::hex_board(short board_size)
     init_node_neighbours();
 }
 
+void hex_board::copy_board(shared_ptr<hex_board> b)
+{
+    if (b->board_size != this->board_size)
+    {
+        return;
+    }
+
+    for (short i = 0; i < this->board_size; i++)
+    {
+        for (short j = 0; j < this->board_size; j++)
+        {
+            this->set_value(i, j, b->get_value(i, j));
+        }
+    }
+}
+
 short hex_board::size()
 {
     return board_size;
@@ -43,13 +59,41 @@ bool hex_board::set_value(short row, short col, hex_value value)
 
     auto hex_node = this->board[row][col];
 
-    if (hex_node->get_value() == hex_value::Empty)
+    if (hex_node->get_value() == hex_value::Empty && value != hex_value::Empty)
     {
         this->board[row][col]->set_value(value);
+        num_filled_hexes++;
+        return true;
+    }
+
+    // undo a move
+    if (hex_node->get_value() != hex_value::Empty && value == hex_value::Empty)
+    {
+        this->board[row][col]->set_value(value);
+        num_filled_hexes--;
         return true;
     }
 
     return false;
+}
+
+
+vector<pair<short, short>> hex_board::get_free_hexes() const
+{
+    vector<pair<short,short>> free_hexes;
+
+    for (short i = 0; i < board_size; i++)
+    {
+        for (short j = 0; j < board_size; j++)
+        {
+            if (board[i][j]->get_value() == hex_value::Empty)
+            {
+                free_hexes.push_back(make_pair(i, j));
+            }
+        }
+    }
+
+    return free_hexes;
 }
 
 /*

@@ -18,6 +18,9 @@ public:
     // if the move is legal, the value is set on the board
     // if not, the method returns false
     bool set_value(short row, short col, hex_value value);
+    vector<pair<short, short>> get_free_hexes() const;
+
+    void copy_board(shared_ptr<hex_board> copy_board);
 
     void print() const;
     void print_node_value(hex_value value) const;
@@ -26,11 +29,10 @@ public:
 private:
     vector<vector<shared_ptr<hex_node>>> board;
     short board_size;
+    int num_filled_hexes = 0;
     void init_nodes();
     void init_node_neighbours();
     bool try_add_node_neighbours(shared_ptr<hex_node> node, short row, short col);
-    bool is_vertical_winner(hex_value val);
-    bool is_horizontal_winner(hex_value val);
 };
 
 #endif // HEXBOARD_H

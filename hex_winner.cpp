@@ -14,6 +14,9 @@ hex_winner::hex_winner(shared_ptr<hex_board> board)
  * path connecting opposite sides vertically
  * or horizontally
  *
+ * x -> should win vertically
+ * o -> should win horizontally
+ *
  */
 
 pair<bool, hex_value> hex_winner::has_winner()
@@ -21,16 +24,6 @@ pair<bool, hex_value> hex_winner::has_winner()
     if (is_winner(direction::horizontal, hex_value::o))
     {
         return make_pair(true, hex_value::o);
-    }
-
-    if (is_winner(direction::vertical, hex_value::o))
-    {
-        return make_pair(true, hex_value::o);
-    }
-
-    if (is_winner(direction::horizontal, hex_value::x))
-    {
-        return make_pair(true, hex_value::x);
     }
 
     if (is_winner(direction::vertical, hex_value::x))
@@ -60,7 +53,7 @@ pair<bool, hex_value> hex_winner::has_winner()
  *
  * Using Dijkstra in this context does not make
  * much sense. All the edges have the same weight.
- * What is more, running Dijsktra on all combinations
+ * What is more, running Dijkstra on all combinations
  * of opposite edge nodes, would have been quite consuming.
  *
  */
